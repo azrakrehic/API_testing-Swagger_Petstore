@@ -49,7 +49,7 @@ describe('Place an order', () => {
         expect(data.complete).to.eq(order.complete)
     }
 
-  
+
 
     before(() => {
         cy.request("POST", "https://petstore3.swagger.io/api/v3/pet", pet).then((data) => {
@@ -71,4 +71,10 @@ describe('Place an order', () => {
             validateResponseForOrder(JSON.parse(data.allRequestResponses[0]["Response Body"]))
         })
     })
+    it ('Deleting order by id', () => {
+        cy.request("DELETE", "https://petstore3.swagger.io/api/v3/store/order/" + order.id).then((data) => {
+            validateStatus(data)
+        })
+    })
+
 })
