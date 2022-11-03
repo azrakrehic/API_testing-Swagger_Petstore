@@ -17,7 +17,7 @@ describe('Place an order', () => {
     }
 
     let order = {
-        "id": 10,
+        "id": 9,
         "petId": 145,
         "quantity": 7,
         "shipDate": "2022-10-26T16:51:33.628+00:00",
@@ -40,7 +40,7 @@ describe('Place an order', () => {
         expect(data.allRequestResponses[0]["Response Status"]).to.eq(200)
     }
 
-    let validateResponseForOrdering = (data) => {
+    let validateResponseForOrder = (data) => {
         expect(data.id).to.eq(order.id)
         expect(data.petId).to.eq(order.petId)
         expect(data.quantity).to.eq(order.quantity)
@@ -48,6 +48,8 @@ describe('Place an order', () => {
         expect(data.status).to.eq(order.status)
         expect(data.complete).to.eq(order.complete)
     }
+
+  
 
     before(() => {
         cy.request("POST", "https://petstore3.swagger.io/api/v3/pet", pet).then((data) => {
@@ -59,7 +61,14 @@ describe('Place an order', () => {
     it('Placing an order via POST method', () => {
         cy.request("POST", "https://petstore3.swagger.io/api/v3/store/order", order).then((data) => {
             validateStatus(data)
-            validateResponseForOrdering(data.allRequestResponses[0]["Response Body"])
+            validateResponseForOrder(data.allRequestResponses[0]["Response Body"])
+        })
+    })
+    it('Getting an order by id via GET method', () => {
+        cy.request("GET", "https://petstore3.swagger.io/api/v3/store/order/" + order.id).then((data) => {
+            validateStatus(data)
+            cy.log(JSON.stringify(data))
+            validateResponseForOrder(JSON.parse(data.allRequestResponses[0]["Response Body"]))
         })
     })
 })
