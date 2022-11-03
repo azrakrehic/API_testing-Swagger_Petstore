@@ -1,19 +1,10 @@
 describe('Place an order', () => {
     let pet = {
-        "id": 145,
-        "name": "Rex",
-        "category": {
-            "id": 1,
-            "name": "psi"
-        },
-        "photoUrls": [
-            "slika1"
-        ],
-        "tags": [{
-            "id": 0,
-            "name": "rex_1"
-        }],
-        "status": "dostupan"
+        "id": 145, "name": "Rex", "category": {
+            "id": 1, "name": "psi"
+        }, "photoUrls": ["slika1"], "tags": [{
+            "id": 0, "name": "rex_1"
+        }], "status": "dostupan"
     }
 
     let order = {
@@ -24,6 +15,7 @@ describe('Place an order', () => {
         "status": "odobrena",
         "complete": true
     }
+    
 
     let validateResponseForCreating = (data) => {
         expect(data.id).to.eq(pet.id)
@@ -50,7 +42,6 @@ describe('Place an order', () => {
     }
 
 
-
     before(() => {
         cy.request("POST", "https://petstore3.swagger.io/api/v3/pet", pet).then((data) => {
             validateStatus(data)
@@ -67,14 +58,12 @@ describe('Place an order', () => {
     it('Getting an order by id via GET method', () => {
         cy.request("GET", "https://petstore3.swagger.io/api/v3/store/order/" + order.id).then((data) => {
             validateStatus(data)
-            cy.log(JSON.stringify(data))
             validateResponseForOrder(JSON.parse(data.allRequestResponses[0]["Response Body"]))
         })
     })
-    it ('Deleting order by id', () => {
+    it('Deleting an order by id', () => {
         cy.request("DELETE", "https://petstore3.swagger.io/api/v3/store/order/" + order.id).then((data) => {
             validateStatus(data)
         })
     })
-
 })
